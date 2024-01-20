@@ -1,10 +1,14 @@
-// example usage:
-// const fs = require("fs");
+const fs = require("fs");
 
-// function readFile(filePath) {
-//   return fs.readFileSync(filePath, "utf-8");
-// }
+function readFile(filePath) {
+  try {
+    const fileInfo = fs.readFileSync(filePath, "utf-8");
+    return fileInfo;
+  } catch (error) {
+    return false;
+  }
+}
 
-// module.exports = {
-//   readFile,
-// };
+module.exports = {
+  readFile,
+};
