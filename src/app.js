@@ -54,9 +54,14 @@ function queryMatchResult() {
       const matchStats = statistics.getMatchStatisticsById(matchId);
       if (!matchStats) {
         console.log(`Statistics for match ID: ${matchId} not found.`);
+        return showMenu();
       }
       // Call to format the raw stats as formatted result.
-      const formattedStats = statistics.formatMatchStats(matchStats);
+      const individualMatchStats =
+        statistics.formatIndividualMatchStats(matchStats);
+
+      statistics.printIndividualMatchStats(individualMatchStats);
+
       // Prompt the user again
       showMenu();
     });
@@ -78,6 +83,8 @@ function getPlayerResults() {
     .then((answers) => {
       const playerName = answers.playerName;
       console.log(`Get Player Results: ${playerName}`);
+
+      statistics.getGamesWonLossByPlayer(playerName);
       // Implement player results query logic here
 
       // Prompt the user again

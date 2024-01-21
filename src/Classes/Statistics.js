@@ -85,7 +85,7 @@ class Statistics {
     // 2 sets to 0
   }
 
-  formatMatchStats(matchData) {
+  formatIndividualMatchStats(matchData) {
     // and return a payload like:
     //  {
     //     winnerName: 'Person A',
@@ -95,9 +95,100 @@ class Statistics {
     //  }
     const players = matchData.players;
     const points = matchData.points;
+
+    if (
+      !players ||
+      !Array.isArray(players) ||
+      players.length !== 2 ||
+      !points ||
+      !Array.isArray(points) ||
+      points.length % 2 !== 0
+    ) {
+      return false;
+    }
+
+    let playerAPoints = 0;
+    let playerBPoints = 0;
+
+    let playerAGames = 0;
+    let playerBGames = 0;
+
+    let playerASets = 0;
+    let playerBSets = 0;
+
+    for (let i = 0; i < points.length; i++) {
+      const point = points[i];
+
+      if (point === "0") {
+        playerAPoints++;
+      } else if (point === "1") {
+        playerBPoints++;
+      }
+
+      // Check for the end of a game
+      if (playerAPoints >= 4 && Math.abs(playerAPoints - playerBPoints) >= 2) {
+        playerAGames++;
+        playerAPoints = 0;
+        playerBPoints = 0;
+      } else if (
+        playerBPoints >= 4 &&
+        Math.abs(playerBPoints - playerAPoints) >= 2
+      ) {
+        playerBGames++;
+        playerAPoints = 0;
+        playerBPoints = 0;
+      }
+
+      // Check for the end of a set
+      if (playerAGames >= 6 || playerBGames >= 6) {
+        if (playerAGames > playerBGames) {
+          playerASets++;
+        } else {
+          playerBSets++;
+        }
+        playerAGames = 0;
+        playerBGames = 0;
+      }
+    }
+
+    let winnerName, loserName, winnerSets, loserSets;
+    if (playerASets > playerBSets) {
+      winnerName = players[0];
+      loserName = players[1];
+      winnerSets = playerASets;
+      loserSets = playerBSets;
+    } else if (playerBSets > playerASets) {
+      winnerName = players[1];
+      loserName = players[0];
+      winnerSets = playerBSets;
+      loserSets = playerASets;
+    } else {
+      winnerName = null;
+      loserName = null;
+      winnerSets = 0;
+      loserSets = 0;
+    }
+
+    return {
+      winnerName,
+      loserName,
+      winnerSets,
+      loserSets,
+    };
   }
 
-  getPlayerStatisticsByPlayerName(playerName) {
+  printIndividualMatchStats({ winnerName, winnerSets, loserName, loserSets }) {
+    //  {
+    //     winnerName: 'Person A',
+    //     loserName: 'Person B',
+    //     winnerScore: 2,
+    //     loserScore: 0
+    //  }
+    console.log(`${winnerName} defeated ${loserName}`);
+    console.log(`${winnerSets} sets to ${loserSets}`);
+  }
+
+  getGamesWonLossByPlayer(playerName) {
     // playerName = 'Person A'
     // returns:
     /**
@@ -109,17 +200,6 @@ class Statistics {
      *        }
      * }
      */
-  }
-
-  // @TODO: another method for adding won/loss games,
-  addPlayerStatisticsByPlayerName({ playerName, gamesWon, gamesLost }) {
-    // playerName: `Person A`,
-    // gamesWon: 5,
-    // gamesLoss: 2
-    // logic:
-    // first check if the player exists yet or not.
-    // if yes, just increment the values won/lost.
-    // if not, push a new object to the map.
   }
 
   // @TODO: test:
