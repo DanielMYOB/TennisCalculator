@@ -4,6 +4,7 @@
 @TODO: how to run project. (with input expected);
 @TODO: how to run tests.
 @TODO: assumptions made
+@TODO: debugging options with vscode.
 
 # Tennis Calculator
 

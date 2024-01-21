@@ -1,19 +1,9 @@
-// show menu:
-
-// Upload file -> give a file directory.
-
-// Query match result -> `Score Match <id>`, might be able to just give the id
-// ie "Query match result: <id>"
-
-// Query games for player:
-// Get Player Results: (games won vs lost) <Player Name>
 const inquirer = require("inquirer");
-const { readFile } = require("./fileReader");
-const Statistics = require("../Classes/Statistics");
+const { readFile } = require("./utils/fileReader");
+const Statistics = require("./Classes/Statistics");
 
 const statistics = new Statistics();
 
-// Function to handle the file upload logic
 function uploadFile() {
   inquirer
     .prompt([
@@ -37,7 +27,9 @@ function uploadFile() {
         console.log("Error: Incorrect file path");
         return showMenu();
       }
-      console.log(`File info: ${fileInfo}`);
+      statistics.parseMatchInfo(fileInfo);
+      console.log("Successfully uploaded file");
+
       // Implement file upload logic here
       showMenu();
       // Prompt the user again
@@ -59,9 +51,12 @@ function queryMatchResult() {
     ])
     .then((answers) => {
       const matchId = answers.matchId;
-      console.log(`Query match result: ${matchId}`);
-      // Implement match query logic here
-
+      const matchStats = statistics.getMatchStatisticsById(matchId);
+      if (!matchStats) {
+        console.log(`Statistics for match ID: ${matchId} not found.`);
+      }
+      // Call to format the raw stats as formatted result.
+      const formattedStats = statistics.formatMatchStats(matchStats);
       // Prompt the user again
       showMenu();
     });
