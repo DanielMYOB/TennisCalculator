@@ -177,6 +177,7 @@ class Statistics {
     };
   }
 
+  // @TODO: export to output class.
   printIndividualMatchStats({ winnerName, winnerSets, loserName, loserSets }) {
     //  {
     //     winnerName: 'Person A',
@@ -200,6 +201,33 @@ class Statistics {
      *        }
      * }
      */
+    // calculate games won/lost for each match:
+
+    // go thru the matches in rawStats, and find all games where `playerName` is included in `players` array.
+    // return [{...gameInfo}, {...gameInfo}] format.
+    const matchesByPlayer = this.findAllMatchesByPlayerName(playerName);
+
+    // can adapt logic from above, however don't need to consider sets.
+    this.totalGamesWonLostByPlayerName(playerName, matchesByPlayer);
+  }
+
+  totalGamesWonLostByPlayerName(playerName, matchesByPlayer) {}
+
+  findAllMatchesByPlayerName(playerName) {
+    const matches = [];
+
+    // Iterate through each match
+    for (const matchNumber in this.rawMatchStats) {
+      const match = this.rawMatchStats[matchNumber];
+
+      // Check if the playerName is present in the "players" array
+      if (match.players.includes(playerName)) {
+        // If found, add the match to the result array
+        matches.push(match);
+      }
+    }
+
+    return matches;
   }
 
   // @TODO: test:
@@ -226,7 +254,7 @@ class Statistics {
 
     matches.forEach((match) => {
       const lines = match.trim().split("\n");
-      const matchNo = parseInt(lines[0].replace(/^0+/, ""));
+      const matchNo = parseInt(lines[0]);
       const players = lines[1].split(" vs ").map((player) => player.trim());
 
       const points = lines.slice(2).map((point) => point.trim());

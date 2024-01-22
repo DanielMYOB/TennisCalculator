@@ -24,19 +24,18 @@ function uploadFile() {
       const fileDirectory = answers.fileDirectory;
       const fileInfo = readFile(fileDirectory);
       if (!fileInfo) {
+        // @TODO: export to output class
         console.log("Error: Incorrect file path");
         return showMenu();
       }
       statistics.parseMatchInfo(fileInfo);
+      // @TODO: export to output class
       console.log("Successfully uploaded file");
 
-      // Implement file upload logic here
       showMenu();
-      // Prompt the user again
     });
 }
 
-// Function to handle the match query logic
 function queryMatchResult() {
   inquirer
     .prompt([
@@ -53,21 +52,21 @@ function queryMatchResult() {
       const matchId = answers.matchId;
       const matchStats = statistics.getMatchStatisticsById(matchId);
       if (!matchStats) {
+        // @TODO: export to output class
         console.log(`Statistics for match ID: ${matchId} not found.`);
         return showMenu();
       }
-      // Call to format the raw stats as formatted result.
+
       const individualMatchStats =
         statistics.formatIndividualMatchStats(matchStats);
 
+      // @TODO: export to output class
       statistics.printIndividualMatchStats(individualMatchStats);
 
-      // Prompt the user again
       showMenu();
     });
 }
 
-// Function to handle the player results query logic
 function getPlayerResults() {
   inquirer
     .prompt([
@@ -82,12 +81,12 @@ function getPlayerResults() {
     ])
     .then((answers) => {
       const playerName = answers.playerName;
+      // @TODO: export to output class
       console.log(`Get Player Results: ${playerName}`);
 
-      statistics.getGamesWonLossByPlayer(playerName);
+      const playerStats = statistics.getGamesWonLossByPlayer(playerName);
       // Implement player results query logic here
 
-      // Prompt the user again
       showMenu();
     });
 }
