@@ -1,6 +1,7 @@
 const Statistics = require("../src/Classes/Statistics");
 const mockFileInfo = require("./mocks/mockFileInfo.js");
 const mockFileResults = require("./mocks/mockFileResults.js");
+const { generateArray } = require("./utils/generateScoreArray.js");
 
 describe("Statistics", () => {
   let statistics;
@@ -148,17 +149,14 @@ describe("Statistics", () => {
 
   describe("-> calculateSetsFromMatch", () => {
     it("3-1", () => {
-      const points = [
-        ...Array.from({ length: 24 * 3 }, () => "0"),
-        ...Array.from({ length: 24 }, () => "1"),
-      ];
+      const points = [...generateArray(24 * 3, "0"), ...generateArray(24, "1")];
       const res = statistics.calculateSetsFromMatch(points);
       expect(res).toEqual({ playerASets: 3, playerBSets: 1 });
     });
     it("1-3", () => {
       const points = [
-        ...Array.from({ length: 24 * 1 }, () => "0"),
-        ...Array.from({ length: 24 * 3 }, () => "1"),
+        ...generateArray(24 * 1, "0"),
+        ...generateArray(24 * 3, "1"),
       ];
       const res = statistics.calculateSetsFromMatch(points);
       expect(res).toEqual({ playerASets: 1, playerBSets: 3 });
@@ -167,10 +165,7 @@ describe("Statistics", () => {
 
   describe("-> getGamesWonByPoints", () => {
     it("Player in position `0`, 18 - 6", () => {
-      const points = [
-        ...Array.from({ length: 24 * 3 }, () => "0"),
-        ...Array.from({ length: 24 }, () => "1"),
-      ];
+      const points = [...generateArray(24 * 3, "0"), ...generateArray(24, "1")];
       const res = statistics.getGamesWonByPoints({
         points,
         playerPoint: "0",
@@ -179,10 +174,7 @@ describe("Statistics", () => {
       expect(res).toEqual({ otherPlayerGames: 6, playerGames: 18 });
     });
     it("Player in position `1`, 6 - 18", () => {
-      const points = [
-        ...Array.from({ length: 24 * 3 }, () => "0"),
-        ...Array.from({ length: 24 }, () => "1"),
-      ];
+      const points = [...generateArray(24 * 3, "0"), ...generateArray(24, "1")];
       const res = statistics.getGamesWonByPoints({
         points,
         playerPoint: "1",
@@ -193,26 +185,28 @@ describe("Statistics", () => {
 
     it("Can handle longer duece game", () => {
       const points = [
-        ...Array.from({ length: 3 }, () => "0"),
-        ...Array.from({ length: 3 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "1"),
-        ...Array.from({ length: 1 }, () => "0"),
-        ...Array.from({ length: 1 }, () => "0"),
+        ...generateArray(3, "0"),
+        ...generateArray(3, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "1"),
+        ...generateArray(1, "0"),
+        ...generateArray(1, "0"),
       ];
       const res = statistics.getGamesWonByPoints({
         points,
