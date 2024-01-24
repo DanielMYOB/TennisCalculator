@@ -190,5 +190,36 @@ describe("Statistics", () => {
       });
       expect(res).toEqual({ otherPlayerGames: 18, playerGames: 6 });
     });
+
+    it("Can handle longer duece game", () => {
+      const points = [
+        ...Array.from({ length: 3 }, () => "0"),
+        ...Array.from({ length: 3 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "1"),
+        ...Array.from({ length: 1 }, () => "0"),
+        ...Array.from({ length: 1 }, () => "0"),
+      ];
+      const res = statistics.getGamesWonByPoints({
+        points,
+        playerPoint: "0",
+        otherPlayerPoint: "1",
+      });
+      expect(res).toEqual({ otherPlayerGames: 0, playerGames: 1 });
+    });
   });
 });

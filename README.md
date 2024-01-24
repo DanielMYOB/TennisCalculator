@@ -49,3 +49,11 @@ Example: `1`
 
 -> Get player results takes the name of the player.
 Example: `Person A`
+
+### Assumptions
+
+Have tried to set this project out somewhat similar to how a read-world application might be. The reason for example I have put `Output` into it's own class (just being a wrapper for console.log), is to simulate some kind of logging middleware, and not cluttering main logic with console.logs.
+
+If spending more time, I would refine the test cases especially around game logic, I'm mostly familiar with the basics of tennis but not sure I've covered all testing scenarios.
+
+I would also set up things in Github/Buildkite with unit test/linting steps, Dockerize the application, etc.
