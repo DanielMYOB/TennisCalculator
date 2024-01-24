@@ -3,3 +3,5 @@ class Ouput {
     console.log(message);
   }
 }
+
+module.exports = Ouput;

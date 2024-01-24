@@ -83,12 +83,11 @@ function getPlayerResults() {
       const playerStats = statistics.getGamesWonLossByPlayer(playerName);
       if (!playerStats) {
         output.print(`No Matches Found For: ${playerName}`);
+      } else {
+        output.print(
+          `Games Win/Loss Record for ${playerName}: ${playerStats.playerGames} / ${playerStats.otherPlayerGames}`
+        );
       }
-
-      output.print(
-        `Games Win/Loss Record for ${playerName}: ${playerStats.playerGames} / ${playerStats.otherPlayerGames}`
-      );
-
       showMenu();
     });
 }
