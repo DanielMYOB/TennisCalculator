@@ -52,11 +52,11 @@ Example: `Person A`
 
 ### Usage With Docker
 
-# Build Container
+#### Build Container
 
 `docker build -t tenniscalculator .`
 
-# Run Container
+#### Run Container
 
 `docker run -it -p 3000:3000 tenniscalculator`
 
