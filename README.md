@@ -1,110 +1,59 @@
-# Tennis Calculator
+# Tennis Calculator Project
 
-The tennis calculator takes a set of scores as inputs and produces useful statistics based on those scores.
+Welcome to the Tennis Calculator project! This calculator is designed to assist you with various tennis-related calculations.
 
-This calculator will used a simplified version of scoring where whoever gets to 6 games first wins the set
+## Getting Started
 
-## Overview
+Follow the steps below to set up and run the Tennis Calculator on your local machine.
 
-The Tennis Calculator takes inputs in the form of a list of points of a tennis match. 
+### Prerequisites
 
-Given this list of points, it will calculate the "games", "sets" and "matches" results.
+Make sure you have Node.js and npm installed on your machine.
 
-From there it can be queried about various statistics around the input matches it received. 
+- [Node.js](https://nodejs.org/)
+- [npm](https://www.npmjs.com/)
 
-## Input
+### Installation
 
-The input will have some header lines, and then a list of points. 
-For example:, the following would result in 2 games to "Person A":
+1. Open your terminal and navigate to the project directory.
 
-    Match: 01
-    Person A vs Person B
-    0
-    1
-    0
-    1
-    0
-    0
-    0
-    0
-    0
-    0
+2. Run the following command to install the project dependencies:
 
-    
-The first row is a match id, the second row shows who is playing against whom.
-After that are a series of points, where 0 is a point for the first person listed, 1 is for last person.
+```bash
+npm install
+```
 
-i.e.
+### Running the Project
 
-| Input                | Score   |
-|----------------------|---------|
-| Match: 01            |         |
-| Person A vs Person B |         |
-| 0                    | 15 - 0  |
-| 1                    | 15 - 15 |
-| 0                    | 30 - 15 |
-| 1                    | 30 - 30 |
-| 0                    | 40 - 30 |
-| 0                    | Game    |
-| 0                    | 15 - 0  |
-| 0                    | 30 - 0  |
-| 0                    | 40 - 0  |
-| 0                    | Game    |
+To start the Tennis Calculator, use the following command:
 
+```bash
+npm start
+```
 
-For processing, blank lines must be ignored
+### Running tests
 
-## Queries
+```bash
+npm run test
+```
 
-### Query match result
-Query scores for a particular match
-Prints who defeated whom, and the result of the sets for the match (winning player score first).
+### Usage
 
-Query: `Score Match <id>`
+Use arrows to navigate through the menu, and enter to select:
 
-Example: `Score Match 01`
+-> Upload file option takes a relative path from root.
+Example: `./data/full_tournament.txt`
 
-Example output:
+-> Query match result takes the match number as an integer.
+Example: `1`
 
-    Person A defeated Person B
-    2 sets to 0
- 
-### Query games for player
-Prints a summary of games won vs lost for a particular player over the tournament
-Query: `Games Player <Player Name>`
+-> Get player results takes the name of the player.
+Example: `Person A`
 
-Example: `Games Player Person A`
+### Assumptions
 
-Example output:
+Have tried to set this project out somewhat similar to how a read-world application might be. The reason for example I have put `Output` into it's own class (just being a wrapper for console.log), is to simulate some kind of logging middleware, and not cluttering main logic with console.logs.
 
-    23 17
+If spending more time, I would refine the test cases especially around game logic, I'm mostly familiar with the basics of tennis but not sure I've covered all testing scenarios.
 
-## Sample output
-Running the application against the 'full_tournament.txt' file results in the following:
-
-    $ python tennis_calculator_app.py test/test_data/full_tournament.txt << EOF
-    Score Match 02
-    Games Player Person A
-    EOF
-    
-    Person C defeated Person A
-    2 sets to 1
-    
-    23 17
-    
-
-
-## Scoring Rules
-Details of tennis scoring can be found online. See here for reference:  
-https://en.wikipedia.org/wiki/Tennis_scoring_system
-
-The variation used for this application is a best of 3 sets match, with first to 6 games wins a set. 
-
-Details as follows:
-* A tennis match is split up into points, games and sets.
-* Winning a game requires a person to win 4 points, but they must be ahead by at least 2 points (deuce, advantage, game)
-* The first player to win 6 games wins a set. I.e:
-    * Players do NOT need to be ahead by 2 to win a set (6-5 finishes a set) 
-    * There is nothing special about that final game in a set. All games are the same.
-* Best of 3 sets (first to 2 sets wins).
-
+I would also set up things in Github/Buildkite with unit test/linting steps, Dockerize the application, etc.
