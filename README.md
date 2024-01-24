@@ -19,9 +19,9 @@ Make sure you have Node.js and npm installed on your machine.
 
 2. Run the following command to install the project dependencies:
 
-   ```bash
-   npm install
-   ```
+```bash
+npm install
+```
 
 ### Running the Project
 
@@ -36,3 +36,16 @@ npm start
 ```bash
 npm run test
 ```
+
+### Usage
+
+Use arrows to navigate through the menu, and enter to select:
+
+-> Upload file option takes a relative path from root.
+Example: `./data/full_tournament.txt`
+
+-> Query match result takes the match number as an integer.
+Example: `1`
+
+-> Get player results takes the name of the player.
+Example: `Person A`
