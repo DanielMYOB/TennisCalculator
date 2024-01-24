@@ -11,14 +11,6 @@ describe("Statistics", () => {
     // Add your test cases for addMatchStatistics method here
   });
 
-  describe("getRawMatchStatsById", () => {
-    // Add your test cases for getRawMatchStatsById method here
-  });
-
-  describe("getMatchStatisticsById", () => {
-    // Add your test cases for getMatchStatisticsById method here
-  });
-
   describe("formatIndividualMatchStats", () => {
     // Add your test cases for formatIndividualMatchStats method here
   });

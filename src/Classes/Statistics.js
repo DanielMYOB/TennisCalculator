@@ -1,38 +1,5 @@
 class Statistics {
-  // needs to keep match info by matchId:
-
-  // Person A defeated Person B
-  // 2 sets to 0
-  // need to query by matchId, so k/v store with matchId as key:
-
-  /**
-   * // Match 2
-   * {
-   *    2: {
-   *    winnerName: 'Person A',
-   *    loserName: 'Person B',
-   *    winnerScore: 2,
-   *    loserScore: 0
-   * }
-   * }
-   */
-
-  // need to keep total won/loss games per player:
-  // Player: Person A
-  // Games Won/Loss: 23 17
-
-  /**
-   * propose k/v store with player name as key:
-   * {
-   *    'Person A': {
-   *            gamesWon: 23,
-   *            gamesLost: 17
-   *        }
-   * }
-   */
-
   constructor() {
-    // does the constructor need any params?
     this.rawMatchStats = {};
   }
 
@@ -40,17 +7,6 @@ class Statistics {
     return this.rawMatchStats;
   }
 
-  // @NOTE: note sure if required:
-  addMatchStatistics(matchStats) {
-    // *    2: {
-    // *    winnerName: 'Person A',
-    // *    loserName: 'Person B',
-    // *    winnerScore: 2,
-    // *    loserScore: 0
-    // * }
-  }
-
-  // @TODO: test
   getRawMatchStatsById(matchId) {
     if (!this.rawMatchStats[matchId]) return false;
 
@@ -58,41 +14,16 @@ class Statistics {
   }
 
   getMatchStatisticsById(matchId) {
-    // matchId = 2,
     const rawMatchStatsById = this.getRawMatchStatsById(matchId);
     if (!rawMatchStatsById) {
       return false;
     }
 
     return rawMatchStatsById;
-    // get raw stats by ID returns:
-    // *    1: { // Match no.
-    // *      players: ['Person A', 'Person B'],
-    // *      points: ['0', '0', '1'] // etc
-    // *      }
-    // ***
-    // write calc to get the actual score (ie 2 sets 0),
-    // and return a payload like:
-    //  {
-    //     winnerName: 'Person A',
-    //     loserName: 'Person B',
-    //     winnerScore: 2,
-    //     loserScore: 0
-    //  }
-    // *** Another func to format the payload:
-    // format the response like:
-    // Person A defeated Person B
-    // 2 sets to 0
   }
 
+  // @TODO: test
   formatIndividualMatchStats(matchData) {
-    // and return a payload like:
-    //  {
-    //     winnerName: 'Person A',
-    //     loserName: 'Person B',
-    //     winnerScore: 2,
-    //     loserScore: 0
-    //  }
     const players = matchData.players;
     const points = matchData.points;
 
@@ -107,6 +38,7 @@ class Statistics {
       return false;
     }
 
+    // *** EXPORT TO FUNCTION 1:
     let playerAPoints = 0;
     let playerBPoints = 0;
 
@@ -150,7 +82,9 @@ class Statistics {
         playerBGames = 0;
       }
     }
+    // ^^^ EXPORT TO FUNCTION 1: ^^^
 
+    // *** EXPORT TO FUNCTION 2:
     let winnerName, loserName, winnerSets, loserSets;
     if (playerASets > playerBSets) {
       winnerName = players[0];
@@ -168,6 +102,7 @@ class Statistics {
       winnerSets = 0;
       loserSets = 0;
     }
+    // ^^^ EXPORT TO FUNCTION 2: ^^^
 
     return {
       winnerName,
@@ -177,52 +112,95 @@ class Statistics {
     };
   }
 
-  // @TODO: export to output class.
-  printIndividualMatchStats({ winnerName, winnerSets, loserName, loserSets }) {
-    //  {
-    //     winnerName: 'Person A',
-    //     loserName: 'Person B',
-    //     winnerScore: 2,
-    //     loserScore: 0
-    //  }
-    console.log(`${winnerName} defeated ${loserName}`);
-    console.log(`${winnerSets} sets to ${loserSets}`);
-  }
-
+  // @TODO: test
   getGamesWonLossByPlayer(playerName) {
-    // playerName = 'Person A'
-    // returns:
-    /**
-     * propose k/v store with player name as key:
-     * {
-     *    'Person A': {
-     *            gamesWon: 23,
-     *            gamesLost: 17
-     *        }
-     * }
-     */
-    // calculate games won/lost for each match:
-
-    // go thru the matches in rawStats, and find all games where `playerName` is included in `players` array.
-    // return [{...gameInfo}, {...gameInfo}] format.
     const matchesByPlayer = this.findAllMatchesByPlayerName(playerName);
 
-    // can adapt logic from above, however don't need to consider sets.
-    this.totalGamesWonLostByPlayerName(playerName, matchesByPlayer);
+    if (matchesByPlayer.length === 0) {
+      return false;
+    }
+
+    const playerWonLossRecord = this.totalGamesWonLostByPlayerName(
+      playerName,
+      matchesByPlayer
+    );
+
+    return playerWonLossRecord;
   }
 
-  totalGamesWonLostByPlayerName(playerName, matchesByPlayer) {}
+  // @TODO: test
+  totalGamesWonLostByPlayerName(playerName, matchesByPlayer) {
+    // *** EXPORT TO FUNCTION 3:
+    const res = matchesByPlayer.map((match) => {
+      const players = match.players;
+      const points = match.points;
 
+      const playerPoint = playerName === players[0] ? "0" : "1";
+      const otherPlayerPoint = playerPoint === "0" ? "1" : "0";
+
+      // do the counting stuff:
+
+      // *********************
+
+      let playerPoints = 0;
+      let otherPlayerPoints = 0;
+
+      let playerGames = 0;
+      let otherPlayerGames = 0;
+
+      for (let i = 0; i < points.length; i++) {
+        const point = points[i];
+
+        if (point === playerPoint) {
+          playerPoints++;
+        } else if (point === otherPlayerPoint) {
+          otherPlayerPoints++;
+        }
+
+        // Check for the end of a game
+        if (
+          playerPoints >= 4 &&
+          Math.abs(playerPoints - otherPlayerPoints) >= 2
+        ) {
+          playerGames++;
+          playerPoints = 0;
+          otherPlayerPoints = 0;
+        } else if (
+          otherPlayerPoints >= 4 &&
+          Math.abs(otherPlayerPoints - playerPoints) >= 2
+        ) {
+          otherPlayerGames++;
+          playerPoints = 0;
+          otherPlayerPoints = 0;
+        }
+      }
+
+      return {
+        playerGames,
+        otherPlayerGames,
+      };
+    });
+    // ^^^ EXPORT TO FUNCTION 3:
+
+    // @TODO: EXPORT TO FUNCTION:
+    return res.reduce(
+      (accumulator, currentValue) => {
+        accumulator.playerGames += currentValue.playerGames;
+        accumulator.otherPlayerGames += currentValue.otherPlayerGames;
+        return accumulator;
+      },
+      { playerGames: 0, otherPlayerGames: 0 }
+    );
+  }
+
+  // @TODO: test
   findAllMatchesByPlayerName(playerName) {
     const matches = [];
 
-    // Iterate through each match
     for (const matchNumber in this.rawMatchStats) {
       const match = this.rawMatchStats[matchNumber];
 
-      // Check if the playerName is present in the "players" array
       if (match.players.includes(playerName)) {
-        // If found, add the match to the result array
         matches.push(match);
       }
     }
@@ -232,20 +210,6 @@ class Statistics {
 
   // @TODO: test:
   parseMatchInfo(fileInfo) {
-    // want a data structure like:
-    /**
-     * {
-     *    1: { // Match no.
-     *      players: ['Person A', 'Person B'],
-     *      points: ['0', '0', '1'] // etc
-     *      }
-     *    2: { // Match no.
-     *      players: ['Person A', 'Person C'],
-     *      points: ['0', '0', '1'] // etc
-     *      }
-     * }
-     */
-
     const matches = fileInfo.split("Match: ");
 
     matches.shift();

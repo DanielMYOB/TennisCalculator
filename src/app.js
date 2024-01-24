@@ -1,8 +1,10 @@
 const inquirer = require("inquirer");
 const { readFile } = require("./utils/fileReader");
 const Statistics = require("./Classes/Statistics");
+const Output = require("./Classes/Output");
 
 const statistics = new Statistics();
+const output = new Output();
 
 function uploadFile() {
   inquirer
@@ -11,8 +13,6 @@ function uploadFile() {
         type: "input",
         name: "fileDirectory",
         message: "Enter file directory:",
-        // @TODO:
-        //./data/full_tournament.txt (how to make this more elegant)
         validate: (value) => {
           return value.length > 0
             ? true
@@ -24,13 +24,11 @@ function uploadFile() {
       const fileDirectory = answers.fileDirectory;
       const fileInfo = readFile(fileDirectory);
       if (!fileInfo) {
-        // @TODO: export to output class
-        console.log("Error: Incorrect file path");
+        output.print("Error: Incorrect file path");
         return showMenu();
       }
       statistics.parseMatchInfo(fileInfo);
-      // @TODO: export to output class
-      console.log("Successfully uploaded file");
+      output.print("Successfully uploaded file");
 
       showMenu();
     });
@@ -52,16 +50,15 @@ function queryMatchResult() {
       const matchId = answers.matchId;
       const matchStats = statistics.getMatchStatisticsById(matchId);
       if (!matchStats) {
-        // @TODO: export to output class
-        console.log(`Statistics for match ID: ${matchId} not found.`);
+        output.print(`Statistics for match ID: ${matchId} not found.`);
         return showMenu();
       }
 
-      const individualMatchStats =
+      const { winnerName, winnerSets, loserName, loserSets } =
         statistics.formatIndividualMatchStats(matchStats);
 
-      // @TODO: export to output class
-      statistics.printIndividualMatchStats(individualMatchStats);
+      output.print(`${winnerName} defeated ${loserName}`);
+      output.print(`${winnerSets} sets to ${loserSets}`);
 
       showMenu();
     });
@@ -81,17 +78,21 @@ function getPlayerResults() {
     ])
     .then((answers) => {
       const playerName = answers.playerName;
-      // @TODO: export to output class
-      console.log(`Get Player Results: ${playerName}`);
+      output.print(`Get Player Results: ${playerName}`);
 
       const playerStats = statistics.getGamesWonLossByPlayer(playerName);
-      // Implement player results query logic here
+      if (!playerStats) {
+        output.print(`No Matches Found For: ${playerName}`);
+      }
+
+      output.print(
+        `Games Win/Loss Record for ${playerName}: ${playerStats.playerGames} / ${playerStats.otherPlayerGames}`
+      );
 
       showMenu();
     });
 }
 
-// Function to display the menu
 function showMenu() {
   inquirer
     .prompt([
@@ -119,15 +120,13 @@ function showMenu() {
           getPlayerResults();
           break;
         case "Exit":
-          console.log("Exiting program.");
+          output.print("Exiting program.");
           break;
         default:
-          console.log("Invalid action selected.");
-          // Prompt the user again
+          output.print("Invalid action selected.");
           showMenu();
       }
     });
 }
 
-// Start the program by displaying the initial menu
 showMenu();
